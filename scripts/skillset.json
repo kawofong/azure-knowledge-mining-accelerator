@@ -1,0 +1,439 @@
+{
+  "name": "ss-blob-collateral",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Text.SplitSkill",
+      "name": "#1",
+      "context": "/document/merged_content",
+      "defaultLanguageCode": "en",
+      "textSplitMode": "pages",
+      "maximumPageLength": 5000,
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/merged_content"
+        },
+        {
+          "name": "languageCode",
+          "source": "/document/language"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "textItems",
+          "targetName": "pages"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.EntityRecognitionSkill",
+      "name": "#2",
+      "context": "/document/merged_content/pages/*",
+      "categories": [
+        "Person",
+        "Quantity",
+        "Organization",
+        "URL",
+        "Email",
+        "Location",
+        "DateTime"
+      ],
+      "defaultLanguageCode": "en",
+      "minimumPrecision": null,
+      "includeTypelessEntities": null,
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/merged_content/pages/*"
+        },
+        {
+          "name": "languageCode",
+          "source": "/document/language"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "persons",
+          "targetName": "people"
+        },
+        {
+          "name": "organizations",
+          "targetName": "organizations"
+        },
+        {
+          "name": "locations",
+          "targetName": "locations"
+        },
+        {
+          "name": "entities",
+          "targetName": "entities"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.KeyPhraseExtractionSkill",
+      "name": "#3",
+      "context": "/document/merged_content/pages/*",
+      "defaultLanguageCode": "en",
+      "maxKeyPhraseCount": null,
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/merged_content/pages/*"
+        },
+        {
+          "name": "languageCode",
+          "source": "/document/language"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "keyPhrases",
+          "targetName": "keyphrases"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.LanguageDetectionSkill",
+      "name": "#4",
+      "context": "/document",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/merged_content"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "languageCode",
+          "targetName": "language"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.TranslationSkill",
+      "name": "#5",
+      "context": "/document/merged_content/pages/*",
+      "defaultFromLanguageCode": null,
+      "defaultToLanguageCode": "en",
+      "suggestedFrom": "en",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/merged_content/pages/*"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "translatedText",
+          "targetName": "translated_text"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.SentimentSkill",
+      "name": "#7",
+      "context": "/document/merged_content/pages/*",
+      "defaultLanguageCode": "en",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/merged_content/pages/*"
+        },
+        {
+          "name": "languageCode",
+          "source": "/document/language"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "score",
+          "targetName": "sentiment"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.MergeSkill",
+      "name": "#8",
+      "context": "/document",
+      "insertPreTag": " ",
+      "insertPostTag": " ",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/content"
+        },
+        {
+          "name": "itemsToInsert",
+          "source": "/document/normalized_images/*/text"
+        },
+        {
+          "name": "offsets",
+          "source": "/document/normalized_images/*/contentOffset"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mergedText",
+          "targetName": "merged_content"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Vision.OcrSkill",
+      "name": "#9",
+      "context": "/document/normalized_images/*",
+      "textExtractionAlgorithm": null,
+      "lineEnding": "Space",
+      "defaultLanguageCode": "en",
+      "detectOrientation": true,
+      "inputs": [
+        {
+          "name": "image",
+          "source": "/document/normalized_images/*"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "targetName": "text"
+        },
+        {
+          "name": "layoutText",
+          "targetName": "layoutText"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Util.ShaperSkill",
+      "name": "#10",
+      "context": "/document/normalized_images/*",
+      "inputs": [
+        {
+          "name": "image",
+          "sourceContext": "/document/normalized_images/*",
+          "inputs": [
+            {
+              "name": "width",
+              "source": "/document/normalized_images/*/width"
+            },
+            {
+              "name": "height",
+              "source": "/document/normalized_images/*/height"
+            },
+            {
+              "name": "originalWidth",
+              "source": "/document/normalized_images/*/originalWidth"
+            },
+            {
+              "name": "originalHeight",
+              "source": "/document/normalized_images/*/originalHeight"
+            },
+            {
+              "name": "text",
+              "source": "/document/normalized_images/*/text"
+            },
+            {
+              "name": "tags",
+              "source": "/document/normalized_images/*/imageTags"
+            },
+            {
+              "name": "description",
+              "source": "/document/normalized_images/*/imageCaption"
+            },
+            {
+              "name": "celebrities",
+              "source": "/document/normalized_images/*/imageCelebrities/*/detail/celebrities/*/name"
+            },
+            {
+              "name": "imgdata",
+              "source": "/document/normalized_images/*"
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "targetName": "imageprojection"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Vision.ImageAnalysisSkill",
+      "name": "#11",
+      "description": null,
+      "context": "/document/normalized_images/*",
+      "defaultLanguageCode": "en",
+      "visualFeatures": [
+        "tags",
+        "description"
+      ],
+      "details": [
+        "celebrities"
+      ],
+      "inputs": [
+        {
+          "name": "image",
+          "source": "/document/normalized_images/*"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tags",
+          "targetName": "imageTags"
+        },
+        {
+          "name": "description",
+          "targetName": "imageCaption"
+        },
+        {
+          "name": "categories",
+          "targetName": "imageCelebrities"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Util.ShaperSkill",
+      "name": "#12",
+      "context": "/document",
+      "inputs": [
+        {
+          "name": "metadata_storage_content_type",
+          "source": "/document/metadata_storage_content_type"
+        },
+        {
+          "name": "metadata_storage_size",
+          "source": "/document/metadata_storage_size"
+        },
+        {
+          "name": "metadata_storage_last_modified",
+          "source": "/document/metadata_storage_last_modified"
+        },
+        {
+          "name": "metadata_storage_content_md5",
+          "source": "/document/metadata_storage_content_md5"
+        },
+        {
+          "name": "metadata_storage_name",
+          "source": "/document/metadata_storage_name"
+        },
+        {
+          "name": "metadata_storage_path",
+          "source": "/document/metadata_storage_path"
+        },
+        {
+          "name": "metadata_storage_file_extension",
+          "source": "/document/metadata_storage_file_extension"
+        },
+        {
+          "name": "metadata_content_type",
+          "source": "/document/metadata_content_type"
+        },
+        {
+          "name": "metadata_language",
+          "source": "/document/metadata_language"
+        },
+        {
+          "name": "metadata_author",
+          "source": "/document/metadata_author"
+        },
+        {
+          "name": "metadata_creation_date",
+          "source": "/document/metadata_creation_date"
+        },
+        {
+          "name": "merged_content",
+          "source": "/document/merged_content"
+        },
+        {
+          "name": "pages",
+          "sourceContext": "/document/merged_content/pages/*",
+          "inputs": [
+            {
+              "name": "keyPhrases",
+              "source": "/document/merged_content/pages/*/keyphrases/*"
+            },
+            {
+              "name": "languageCode",
+              "source": "/document/language"
+            },
+            {
+              "name": "translatedText",
+              "source": "/document/merged_content/pages/*/translated_text"
+            },
+            {
+              "name": "sentimentScore",
+              "source": "/document/merged_content/pages/*/sentiment"
+            },
+            {
+              "name": "Entities",
+              "sourceContext": "/document/merged_content/pages/*/entities/*",
+              "inputs": [
+                {
+                  "name": "Entity",
+                  "source": "/document/merged_content/pages/*/entities/*/name"
+                },
+                {
+                  "name": "EntityType",
+                  "source": "/document/merged_content/pages/*/entities/*/type"
+                },
+                {
+                  "name": "EntitySubType",
+                  "source": "/document/merged_content/pages/*/entities/*/subType"
+                },
+                {
+                  "name": "Url",
+                  "source": "/document/merged_content/pages/*/entities/*/wikipediaUrl"
+                }
+              ]
+            },
+            {
+              "name": "Page",
+              "source": "/document/merged_content/pages/*"
+            }
+          ]
+        },
+        {
+          "name": "Images",
+          "sourceContext": "/document/normalized_images/*",
+          "inputs": [
+            {
+              "name": "Images",
+              "source": "/document/normalized_images/*/imageprojection/image"
+            },
+            {
+              "name": "layoutText",
+              "source": "/document/normalized_images/*/layoutText"
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "targetName": "objectprojection"
+        }
+      ]
+    }
+  ],
+  "cognitiveServices": {
+    "@odata.type": "#Microsoft.Azure.Search.CognitiveServicesByKey",
+    "key": "<cognitive-service-key>"
+  },
+  "knowledgeStore": {
+    "storageConnectionString": "<blob-connection-string>",
+    "projections": [
+      {
+        "objects": [
+          {
+            "storageContainer": "enriched",
+            "referenceKeyName": null,
+            "generatedKeyName": null,
+            "source": "/document/objectprojection"
+          }
+        ]
+      }
+    ]
+  }
+}

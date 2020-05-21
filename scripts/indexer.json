@@ -1,0 +1,82 @@
+{
+  "name": "idxr-blob-collateral",
+  "dataSourceName": "ds-blob-collateral",
+  "skillsetName": "ss-blob-collateral",
+  "targetIndexName": "idx-blob-collateral",
+  "disabled": null,
+  "schedule": null,
+  "parameters": {
+    "batchSize": null,
+    "maxFailedItems": 0,
+    "maxFailedItemsPerBatch": 0,
+    "base64EncodeKeys": null,
+    "configuration": {
+      "dataToExtract": "contentAndMetadata",
+      "parsingMode": "default",
+      "imageAction": "generateNormalizedImages"
+    }
+  },
+  "fieldMappings": [
+    {
+      "sourceFieldName": "metadata_storage_path",
+      "targetFieldName": "metadata_storage_path",
+      "mappingFunction": {
+        "name": "base64Encode"
+      }
+    }
+  ],
+  "outputFieldMappings": [
+    {
+      "sourceFieldName": "/document/merged_content/pages/*/people/*",
+      "targetFieldName": "people"
+    },
+    {
+      "sourceFieldName": "/document/merged_content/pages/*/organizations/*",
+      "targetFieldName": "organizations"
+    },
+    {
+      "sourceFieldName": "/document/merged_content/pages/*/locations/*",
+      "targetFieldName": "locations"
+    },
+    {
+      "sourceFieldName": "/document/merged_content/pages/*/keyphrases/*",
+      "targetFieldName": "keyphrases"
+    },
+    {
+      "sourceFieldName": "/document/language",
+      "targetFieldName": "language"
+    },
+    {
+      "sourceFieldName": "/document/merged_content/pages/*/translated_text",
+      "targetFieldName": "translated_text"
+    },
+    {
+      "sourceFieldName": "/document/merged_content/pages/*/sentiment",
+      "targetFieldName": "sentiment"
+    },
+    {
+      "sourceFieldName": "/document/merged_content",
+      "targetFieldName": "merged_content"
+    },
+    {
+      "sourceFieldName": "/document/normalized_images/*/text",
+      "targetFieldName": "text"
+    },
+    {
+      "sourceFieldName": "/document/normalized_images/*/layoutText",
+      "targetFieldName": "layoutText"
+    },
+    {
+      "sourceFieldName": "/document/normalized_images/*/imageTags/*/name",
+      "targetFieldName": "imageTags"
+    },
+    {
+      "sourceFieldName": "/document/normalized_images/*/imageCaption",
+      "targetFieldName": "imageCaption"
+    },
+    {
+      "sourceFieldName": "/document/normalized_images/*/imageCelebrities/*/detail/celebrities/*/name",
+      "targetFieldName": "imageCelebrities"
+    }
+  ]
+}

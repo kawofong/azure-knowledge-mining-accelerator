@@ -1,0 +1,11 @@
+{
+  "name": "ds-blob-collateral",
+  "type": "azureblob",
+  "credentials": {
+    "connectionString": "<blob-connection-string>"
+  },
+  "container": {
+    "name": "raw",
+    "query": "travel_collateral/"
+  }
+}
