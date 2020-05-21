@@ -27,8 +27,11 @@ Solution accelerator for Azure knowledge mining use cases using [Azure Cognitive
 
 - [Azure Cognitive Search: Built-in Skills](https://docs.microsoft.com/en-us/azure/search/cognitive-search-predefined-skills)
 
-- [Azure Cognitive Search: Debug sessions](https://docs.microsoft.com/en-us/azure/search/cognitive-search-tutorial-debug-sessions)
-  - At the time of writing, the debug sessions feature is in preview. For more information on how to request for this feature, see this [doc](https://docs.microsoft.com/en-us/azure/search/whats-new#may-2020-microsoft-build)
+- [Github | Azure | Azure Cognitive Search Sample Custom Skills](https://github.com/Azure-Samples/azure-search-power-skills)
+
+- [Github | Azure | Azure Cognitive Search Sample Data](https://github.com/Azure-Samples/azure-search-sample-data)
+
+- [Github | Azure | Azure Cognitive Search Workshop](https://github.com/Azure-Samples/azure-search-knowledge-mining)
 
 ## TODO
 
@@ -37,6 +40,7 @@ Solution accelerator for Azure knowledge mining use cases using [Azure Cognitive
 - Instructions on getting started
 - IaC (ARM)
 - include suggester in demo
+- reporting
 
 ---
 
