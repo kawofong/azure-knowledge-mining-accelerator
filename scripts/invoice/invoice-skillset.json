@@ -1,0 +1,189 @@
+{
+  "name": "ss-blob-invoice",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Text.MergeSkill",
+      "name": "#1",
+      "context": "/document",
+      "insertPreTag": " ",
+      "insertPostTag": " ",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/content"
+        },
+        {
+          "name": "itemsToInsert",
+          "source": "/document/normalized_images/*/text"
+        },
+        {
+          "name": "offsets",
+          "source": "/document/normalized_images/*/contentOffset"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mergedText",
+          "targetName": "merged_content"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+      "name": "formrecognizer",
+      "description": "Extracts fields from a form using a pre-trained form recognition model",
+      "uri": "https://akm-function-app-jfzfvm4m64cz4.azurewebsites.net/api/analyze-form?code=3iZDlG1OaZ7JM/DiCd5VCK5dMfm2xOn1Dzkgolp8viDowZQAVjY/aQ==",
+      "httpMethod": "POST",
+      "timeout": "PT30S",
+      "context": "/document",
+      "batchSize": 1,
+      "inputs": [
+        {
+          "name": "formUrl",
+          "source": "/document/metadata_storage_path"
+        },
+        {
+          "name": "formSasToken",
+          "source": "/document/metadata_storage_sas_token"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "address",
+          "targetName": "address"
+        },
+        {
+          "name": "recipient",
+          "targetName": "recipient"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Vision.OcrSkill",
+      "name": "#2",
+      "context": "/document/normalized_images/*",
+      "textExtractionAlgorithm": null,
+      "lineEnding": "Space",
+      "defaultLanguageCode": "en",
+      "detectOrientation": true,
+      "inputs": [
+        {
+          "name": "image",
+          "source": "/document/normalized_images/*"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "targetName": "text"
+        },
+        {
+          "name": "layoutText",
+          "targetName": "layoutText"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Util.ShaperSkill",
+      "name": "#3",
+      "context": "/document",
+      "inputs": [
+        {
+          "name": "metadata_storage_content_type",
+          "source": "/document/metadata_storage_content_type"
+        },
+        {
+          "name": "metadata_storage_size",
+          "source": "/document/metadata_storage_size"
+        },
+        {
+          "name": "metadata_storage_last_modified",
+          "source": "/document/metadata_storage_last_modified"
+        },
+        {
+          "name": "metadata_storage_content_md5",
+          "source": "/document/metadata_storage_content_md5"
+        },
+        {
+          "name": "metadata_storage_name",
+          "source": "/document/metadata_storage_name"
+        },
+        {
+          "name": "metadata_storage_path",
+          "source": "/document/metadata_storage_path"
+        },
+        {
+          "name": "metadata_storage_file_extension",
+          "source": "/document/metadata_storage_file_extension"
+        },
+        {
+          "name": "metadata_content_type",
+          "source": "/document/metadata_content_type"
+        },
+        {
+          "name": "metadata_language",
+          "source": "/document/metadata_language"
+        },
+        {
+          "name": "metadata_author",
+          "source": "/document/metadata_author"
+        },
+        {
+          "name": "metadata_title",
+          "source": "/document/metadata_title"
+        },
+        {
+          "name": "metadata_creation_date",
+          "source": "/document/metadata_creation_date"
+        },
+        {
+          "name": "merged_content",
+          "source": "/document/merged_content"
+        },
+        {
+          "name": "Images",
+          "sourceContext": "/document/normalized_images/*",
+          "inputs": [
+            {
+              "name": "Images",
+              "source": "/document/normalized_images/*/imageprojection/image"
+            },
+            {
+              "name": "layoutText",
+              "source": "/document/normalized_images/*/layoutText"
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "targetName": "objectprojection"
+        }
+      ]
+    }
+  ],
+  "cognitiveServices": {
+    "@odata.type": "#Microsoft.Azure.Search.CognitiveServicesByKey",
+    "key": "651b57a9d04c46138b1a6950569d6b61"
+  },
+  "knowledgeStore": {
+    "storageConnectionString": "DefaultEndpointsProtocol=https;AccountName=akmsa;AccountKey=/SY0EGaJEbtcokT8f5HcHS5c/EDqnnqzNwefCb7cSdT9nwAd+VoA6TFvnpqDMoEVxAKOtVxJKae3DK0/GIEPuw==;EndpointSuffix=core.windows.net",
+    "projections": [
+      {
+        "tables": [],
+        "objects": [
+          {
+            "storageContainer": "enriched",
+            "referenceKeyName": null,
+            "generatedKeyName": null,
+            "source": "/document/objectprojection",
+            "sourceContext": null,
+            "inputs": []
+          }
+        ],
+        "files": []
+      }
+    ]
+  }
+}

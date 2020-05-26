@@ -35,7 +35,8 @@ Solution accelerator for Azure knowledge mining use cases using [Azure Cognitive
 
 ## TODO
 
-- Gather data (healthcare research paper, media image, FSI invoice, manufacturing field note)
+- include custom skill in skillset
+- Gather data (healthcare research paper, media image, manufacturing field note)
 - build pipeline for each type of data
 - Instructions on getting started
 - IaC (ARM)

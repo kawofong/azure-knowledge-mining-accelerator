@@ -1,11 +1,11 @@
 {
-  "name": "ds-blob-collateral",
+  "name": "ds-blob-invoice",
   "type": "azureblob",
   "credentials": {
     "connectionString": "DefaultEndpointsProtocol=https;AccountName=akmsa;AccountKey=/SY0EGaJEbtcokT8f5HcHS5c/EDqnnqzNwefCb7cSdT9nwAd+VoA6TFvnpqDMoEVxAKOtVxJKae3DK0/GIEPuw==;EndpointSuffix=core.windows.net"
   },
   "container": {
     "name": "raw",
-    "query": "travel_collateral/"
+    "query": "invoice/"
   }
 }

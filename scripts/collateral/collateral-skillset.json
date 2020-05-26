@@ -419,10 +419,10 @@
   ],
   "cognitiveServices": {
     "@odata.type": "#Microsoft.Azure.Search.CognitiveServicesByKey",
-    "key": "<cognitive-service-key>"
+    "key": "651b57a9d04c46138b1a6950569d6b61"
   },
   "knowledgeStore": {
-    "storageConnectionString": "<blob-connection-string>",
+    "storageConnectionString": "DefaultEndpointsProtocol=https;AccountName=akmsa;AccountKey=/SY0EGaJEbtcokT8f5HcHS5c/EDqnnqzNwefCb7cSdT9nwAd+VoA6TFvnpqDMoEVxAKOtVxJKae3DK0/GIEPuw==;EndpointSuffix=core.windows.net",
     "projections": [
       {
         "objects": [

@@ -29,8 +29,8 @@ set -o pipefail
 # Environment variables (and their defaults) that this script depends on
 COG_SEARCH_NAME="${COG_SEARCH_NAME:-akm-search}" # Azure cognitive search resource name
 COG_SEARCH_KEY="${COG_SEARCH_KEY:-key}"          # Azure cognitive search admin key
-BLOB_CONN_STR="${BLOB_CONN_STR:-key}" # Azure blob connection string
-COG_SERVICE_KEY="${COG_SERVICE_KEY:-key}" # Azure cognitive service admin key
+BLOB_CONN_STR="${BLOB_CONN_STR:-key}"            # Azure blob connection string
+COG_SERVICE_KEY="${COG_SERVICE_KEY:-key}"        # Azure cognitive service admin key
 
 ### Functions
 ##############################################################################
@@ -91,37 +91,75 @@ info "Substituting parameter values to files"
 find . -name '*.json' -exec sed -i -e "s/<blob-connection-string>/${BLOB_CONN_STR//\//\/}/g" {} \;
 find . -name '*.json' -exec sed -i -e "s/<cognitive-service-key>/${COG_SERVICE_KEY}/g" {} \;
 
+info "--- Creating collateral AI enrichment pipeline ---"
 
-info "Creating data source"
+info "Creating collateral data source"
 curl --silent -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
-  -d @datasource.json \
+  -d @collateral/collateral-datasource.json \
   "${datasource_endpoint}" \
   > /dev/null
 
-info "Creating skillset"
+info "Creating collateral skillset"
 curl --silent -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
-  -d @skillset.json \
+  -d @collateral/collateral-skillset.json \
   "${skillset_endpoint}" \
   > /dev/null
 
-info "Creating index"
+info "Creating collateral index"
 curl --silent -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
-  -d @index.json \
+  -d @collateral/collateral-index.json \
   "${index_endpoint}" \
   > /dev/null
 
-info "Creating indexer"
+info "Creating collateral indexer"
 curl --silent -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
-  -d @indexer.json \
+  -d @collateral/collateral-indexer.json \
   "${indexer_endpoint}" \
   > /dev/null
 
-info "Cognitive search setup complete"
+info "--- Collateral AI enrichment pipeline setup complete ---"
+
+
+info "--- Creating invoice AI enrichment pipeline ---"
+
+info "Creating invoice data source"
+curl --silent -X POST \
+  -H 'Content-Type: application/json' \
+  -H "api-key: ${COG_SEARCH_KEY}" \
+  -d @invoice/invoice-datasource.json \
+  "${datasource_endpoint}" \
+  > /dev/null
+
+info "Creating invoice skillset"
+curl --silent -X POST \
+  -H 'Content-Type: application/json' \
+  -H "api-key: ${COG_SEARCH_KEY}" \
+  -d @invoice/invoice-skillset.json \
+  "${skillset_endpoint}" \
+  > /dev/null
+
+info "Creating invoice index"
+curl --silent -X POST \
+  -H 'Content-Type: application/json' \
+  -H "api-key: ${COG_SEARCH_KEY}" \
+  -d @invoice/invoice-index.json \
+  "${index_endpoint}" \
+  > /dev/null
+
+info "Creating invoice indexer"
+curl --silent -X POST \
+  -H 'Content-Type: application/json' \
+  -H "api-key: ${COG_SEARCH_KEY}" \
+  -d @invoice/invoice-indexer.json \
+  "${indexer_endpoint}" \
+  > /dev/null
+
+info "--- Invoice AI enrichment pipeline setup complete ---"
