@@ -32,7 +32,7 @@
       "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
       "name": "formrecognizer",
       "description": "Extracts fields from a form using a pre-trained form recognition model",
-      "uri": "https://akm-function-app-jfzfvm4m64cz4.azurewebsites.net/api/analyze-form?code=3iZDlG1OaZ7JM/DiCd5VCK5dMfm2xOn1Dzkgolp8viDowZQAVjY/aQ==",
+      "uri": "<form-rec-function-url>",
       "httpMethod": "POST",
       "timeout": "PT30S",
       "context": "/document",
@@ -165,10 +165,10 @@
   ],
   "cognitiveServices": {
     "@odata.type": "#Microsoft.Azure.Search.CognitiveServicesByKey",
-    "key": "651b57a9d04c46138b1a6950569d6b61"
+    "key": "<cognitive-service-key>"
   },
   "knowledgeStore": {
-    "storageConnectionString": "DefaultEndpointsProtocol=https;AccountName=akmsa;AccountKey=/SY0EGaJEbtcokT8f5HcHS5c/EDqnnqzNwefCb7cSdT9nwAd+VoA6TFvnpqDMoEVxAKOtVxJKae3DK0/GIEPuw==;EndpointSuffix=core.windows.net",
+    "storageConnectionString": "<blob-connection-string>",
     "projections": [
       {
         "tables": [],

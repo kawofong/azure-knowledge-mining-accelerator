@@ -35,13 +35,13 @@ Solution accelerator for Azure knowledge mining use cases using [Azure Cognitive
 
 ## TODO
 
-- include custom skill in skillset
 - Gather data (healthcare research paper, media image, manufacturing field note)
 - build pipeline for each type of data
 - Instructions on getting started
-- IaC (ARM)
-- include suggester in demo
+- create postman collection to demo boosting/autocomplete/suggestion
 - reporting
+- test using cloud shell
+- sanitize credentials
 
 ---
 
