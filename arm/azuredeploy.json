@@ -1,0 +1,199 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "baseName": {
+      "type": "string",
+      "maxLength": 8,
+      "minLength": 3,
+      "metadata": {
+        "description": "The base name to use as prefix to create all the resources."
+      }
+    }
+  },
+  "variables": {
+    "searchName": "[concat(parameters('baseName'),'-search-', uniqueString(resourceGroup().id))]",
+    "searchSku": "basic",
+    "searchReplicaCount": 1,
+    "searchPartitionCount": 1,
+    "searchHostingMode": "Default",
+    "storageAccountName": "[concat(toLower(replace(parameters('baseName'),'-', '')), 'sa', uniqueString(resourceGroup().id))]",
+    "storageAccountType": "Standard_LRS",
+    "cognitiveServiceName": "[concat(parameters('baseName'),'-cogsrv-', uniqueString(resourceGroup().id))]",
+    "cognitiveServiceSku": "S0",
+    "formRecognizerName": "[concat(parameters('baseName'),'-formrec-', uniqueString(resourceGroup().id))]",
+    "formRecognizerSku": "S0",
+    "functionAppName": "[toLower(concat(parameters('baseName'), '-function-', uniqueString(resourceGroup().id)))]",
+    "repoURL": "https://github.com/Azure-Samples/azure-search-power-skills",
+    "functionProject": "Vision\\AnalyzeForm\\AnalyzeForm.csproj"
+  },
+  "resources": [
+    {
+      "apiVersion": "2020-03-13",
+      "name": "[variables('searchName')]",
+      "type": "Microsoft.Search/searchServices",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[toLower(variables('searchSku'))]"
+      },
+      "properties": {
+        "replicaCount": "[variables('searchReplicaCount')]",
+        "partitionCount": "[variables('searchPartitionCount')]",
+        "hostingMode": "[variables('searchHostingMode')]"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('storageAccountName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[variables('storageAccountType')]"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            },
+            "file": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "supportsHttpsTrafficOnly": true
+      }
+    },
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "apiVersion": "2017-04-18",
+      "name": "[variables('cognitiveServiceName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[variables('cognitiveServiceSku')]"
+      },
+      "kind": "CognitiveServices",
+      "properties": {
+        "apiProperties": {
+          "statisticsEnabled": false
+        }
+      }
+    },
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "apiVersion": "2017-04-18",
+      "name": "[variables('formRecognizerName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[variables('formRecognizerSku')]"
+      },
+      "kind": "FormRecognizer",
+      "properties": {
+        "customSubDomainName": "[variables('formRecognizerName')]"
+      }
+    },
+    {
+      "apiVersion": "2016-08-01",
+      "name": "[variables('functionAppName')]",
+      "type": "Microsoft.Web/sites",
+      "kind": "functionapp",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+      ],
+      "properties": {
+        "name": "[variables('functionAppName')]",
+        "kind": "functionapp",
+        "httpsOnly": true,
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-06-15').key1)]"
+            },
+            {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[toLower(variables('functionAppName'))]"
+            },
+            {
+              "name": "AzureWebJobsDashboard",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-06-15').key1)]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-06-15').key1)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~2"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_RUNTIME",
+              "value": "dotnet"
+            },
+            {
+              "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+              "value": true
+            },
+            {
+              "name": "PROJECT",
+              "value": "[variables('functionProject')]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "name": "web",
+          "type": "sourcecontrols",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
+          ],
+          "properties": {
+            "RepoUrl": "[variables('repoURL')]",
+            "branch": "master",
+            "project": "[variables('functionProject')]",
+            "IsManualIntegration": true
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": {
+    "AzureFunctionName": {
+      "type": "string",
+      "value": "[variables('functionAppName')]"
+    },
+    "AzureCognitiveSearchName": {
+      "type": "string",
+      "value": "[variables('searchName')]"
+    },
+    "AzureCognitiveSearchKey": {
+      "type": "string",
+      "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchName')), providers('Microsoft.Search', 'searchServices').apiVersions[0]).primaryKey]"
+    },
+    "AzureBlobName": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]"
+    },
+    "AzureBlobConnectionString": {
+      "type": "string",
+      "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+    },
+    "AzureCognitiveServiceKey": {
+      "type": "string",
+      "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName')), providers('Microsoft.CognitiveServices', 'accounts').apiVersions[0]).key1]"
+    },
+    "AzureFormRecognizerName": {
+      "type": "string",
+      "value": "[variables('formRecognizerName')]"
+    },
+    "AzureFormRecognizerKey": {
+      "type": "string",
+      "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('formRecognizerName')), providers('Microsoft.CognitiveServices', 'accounts').apiVersions[0]).key1]"
+    }
+  }
+}
