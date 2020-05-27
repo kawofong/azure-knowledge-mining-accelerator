@@ -1,0 +1,5 @@
+{
+  "name": "synm-states",
+  "format": "solr",
+  "synonyms": "CA, California, Cali, Cali. => CA\nNew York, NY => NY\nGeorgia, GA=> GA\nWashington, Wash., WA => WA\n"
+}

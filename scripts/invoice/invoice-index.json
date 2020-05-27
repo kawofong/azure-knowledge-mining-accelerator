@@ -256,7 +256,9 @@
       "analyzer": "standard.lucene",
       "indexAnalyzer": null,
       "searchAnalyzer": null,
-      "synonymMaps": [],
+      "synonymMaps": [
+        "synm-states"
+      ],
       "fields": []
     },
     {
@@ -273,8 +275,25 @@
       "fields": []
     }
   ],
-  "suggesters": [],
-  "scoringProfiles": [],
+  "suggesters": [
+    {
+      "name": "sg-invoice",
+      "searchMode": "analyzingInfixMatching",
+      "sourceFields": [
+        "recipient"
+      ]
+    }
+  ],
+  "scoringProfiles": [
+    {
+      "name": "boostRecipient",
+      "text": {
+        "weights": {
+          "recipient": 2
+        }
+      }
+    }
+  ],
   "defaultScoringProfile": "",
   "corsOptions": null,
   "analyzers": [],
