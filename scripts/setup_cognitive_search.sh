@@ -29,8 +29,9 @@ set -o pipefail
 # Environment variables (and their defaults) that this script depends on
 COG_SEARCH_NAME="${COG_SEARCH_NAME:-akm-search}" # Azure cognitive search resource name
 COG_SEARCH_KEY="${COG_SEARCH_KEY:-key}"          # Azure cognitive search admin key
-BLOB_CONN_STR="${BLOB_CONN_STR:-key}"            # Azure blob connection string
+BLOB_CONN_STR="${BLOB_CONN_STR:-url}"            # Azure blob connection string
 COG_SERVICE_KEY="${COG_SERVICE_KEY:-key}"        # Azure cognitive service admin key
+FUNCTION_URL="${FUNCTION_URL:-url}"              # Azure function url for form analysis skill
 
 ### Functions
 ##############################################################################
@@ -83,13 +84,15 @@ api_version='2019-05-06-Preview'
 cog_search_endpoint="https://${COG_SEARCH_NAME}.search.windows.net"
 datasource_endpoint="${cog_search_endpoint}/datasources?api-version=${api_version}"
 skillset_endpoint="${cog_search_endpoint}/skillsets?api-version=${api_version}"
+synonymmap_endpoint="${cog_search_endpoint}/synonymmaps?api-version=${api_version}"
 index_endpoint="${cog_search_endpoint}/indexes?api-version=${api_version}"
 indexer_endpoint="${cog_search_endpoint}/indexers?api-version=${api_version}"
 
 
 info "Substituting parameter values to files"
-find . -name '*.json' -exec sed -i -e "s/<blob-connection-string>/${BLOB_CONN_STR//\//\/}/g" {} \;
+find . -name '*.json' -exec sed -i -e "s/<blob-connection-string>/${BLOB_CONN_STR//\//\\\/}/g" {} \;
 find . -name '*.json' -exec sed -i -e "s/<cognitive-service-key>/${COG_SERVICE_KEY}/g" {} \;
+find . -name '*.json' -exec sed -i -e "s/<form-rec-function-url>/${FUNCTION_URL//\//\\\/}/g" {} \;
 
 info "--- Creating collateral AI enrichment pipeline ---"
 
@@ -99,7 +102,7 @@ curl --silent -X POST \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @collateral/collateral-datasource.json \
   "${datasource_endpoint}" \
-  > /dev/null
+  1> /dev/null
 
 info "Creating collateral skillset"
 curl --silent -X POST \
@@ -107,7 +110,7 @@ curl --silent -X POST \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @collateral/collateral-skillset.json \
   "${skillset_endpoint}" \
-  > /dev/null
+  1> /dev/null
 
 info "Creating collateral index"
 curl --silent -X POST \
@@ -115,7 +118,7 @@ curl --silent -X POST \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @collateral/collateral-index.json \
   "${index_endpoint}" \
-  > /dev/null
+  1> /dev/null
 
 info "Creating collateral indexer"
 curl --silent -X POST \
@@ -123,7 +126,7 @@ curl --silent -X POST \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @collateral/collateral-indexer.json \
   "${indexer_endpoint}" \
-  > /dev/null
+  1> /dev/null
 
 info "--- Collateral AI enrichment pipeline setup complete ---"
 
@@ -136,7 +139,7 @@ curl --silent -X POST \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @invoice/invoice-datasource.json \
   "${datasource_endpoint}" \
-  > /dev/null
+  1> /dev/null
 
 info "Creating invoice skillset"
 curl --silent -X POST \
@@ -144,7 +147,15 @@ curl --silent -X POST \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @invoice/invoice-skillset.json \
   "${skillset_endpoint}" \
-  > /dev/null
+  1> /dev/null
+
+info "Creating state synonym map"
+curl --silent -X POST \
+  -H 'Content-Type: application/json' \
+  -H "api-key: ${COG_SEARCH_KEY}" \
+  -d @invoice/invoice-synonym.json \
+  "${synonymmap_endpoint}" \
+  1> /dev/null
 
 info "Creating invoice index"
 curl --silent -X POST \
@@ -152,7 +163,7 @@ curl --silent -X POST \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @invoice/invoice-index.json \
   "${index_endpoint}" \
-  > /dev/null
+  1> /dev/null
 
 info "Creating invoice indexer"
 curl --silent -X POST \
@@ -160,6 +171,6 @@ curl --silent -X POST \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @invoice/invoice-indexer.json \
   "${indexer_endpoint}" \
-  > /dev/null
+  1> /dev/null
 
 info "--- Invoice AI enrichment pipeline setup complete ---"
