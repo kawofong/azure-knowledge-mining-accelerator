@@ -90,7 +90,7 @@ indexer_endpoint="${cog_search_endpoint}/indexers?api-version=${api_version}"
 
 
 info "Changing current working directory to $(dirname "$0")"
-cd "$(dirname "$0")"
+pushd "$(dirname "$0")"
 
 info "Substituting parameter values to files"
 find . -name '*.json' -exec sed -i -e "s/<blob-connection-string>/${BLOB_CONN_STR//\//\\\/}/g" {} \;
@@ -177,3 +177,5 @@ curl --silent -X POST \
   1> /dev/null
 
 info "--- Invoice AI enrichment pipeline setup complete ---"
+
+popd

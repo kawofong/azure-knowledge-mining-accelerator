@@ -84,7 +84,7 @@ form_rec_endpoint="https://${FORM_REC_NAME}.cognitiveservices.azure.com/formreco
 
 
 info "Changing current working directory to $(dirname "$0")"
-cd "$(dirname "$0")"
+pushd "$(dirname "$0")"
 
 info "Substituting parameter values to files"
 escaped_sas_url=$(echo $BLOB_SAS_URL | sed -r 's/\//\\\//g' | sed -r 's/\&/\\&/g')
@@ -102,6 +102,7 @@ FORM_REC_MODEL_ID=$(echo $form_rec_model_url | cut -d'/' -f 8)
 info "Waiting for form recognizer model to train"
 sleep 3
 
-info "The form recognizer model is ready at with model id '${FORM_REC_MODEL_ID}'"
+info "The form recognizer model is ready at with id '${FORM_REC_MODEL_ID}'"
 export FORM_REC_MODEL_ID
 
+popd
