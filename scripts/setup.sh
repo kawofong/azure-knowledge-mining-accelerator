@@ -155,7 +155,7 @@ blob_sas_token=$(az storage account generate-sas \
 --permissions lr \
 --account-name "${azure_blob_name}" \
 --services b \
---resource-types co \
+--resource-types sco \
 --expiry $end \
 --connection-string "${azure_blob_conn_str}" \
 -o tsv)
