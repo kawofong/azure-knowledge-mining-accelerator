@@ -169,6 +169,7 @@ export BLOB_SAS_URL=$blob_sas_url
 
 # Configure Azure function custom skill
 info "Configuring custom skill hosted on Azure function"
+FORM_REC_MODEL_ID="${FORM_REC_MODEL_ID:-1234}"
 az functionapp config appsettings set \
 --name "$azure_function_name" \
 --resource-group "${az_rg_name}" \

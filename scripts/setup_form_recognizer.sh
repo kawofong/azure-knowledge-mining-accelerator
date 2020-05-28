@@ -83,6 +83,9 @@ fi
 form_rec_endpoint="https://${FORM_REC_NAME}.cognitiveservices.azure.com/formrecognizer/v2.0-preview/custom/models"
 
 
+info "Changing current working directory to $(dirname "$0")"
+cd "$(dirname "$0")"
+
 info "Substituting parameter values to files"
 escaped_sas_url=$(echo $BLOB_SAS_URL | sed -r 's/\//\\\//g' | sed -r 's/\&/\\&/g')
 find ./formRecognizer -name '*.json' -exec sed -i -e "s/<blob-sas-url>/${escaped_sas_url}/g" {} \;

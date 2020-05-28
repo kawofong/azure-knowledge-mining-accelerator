@@ -89,6 +89,9 @@ index_endpoint="${cog_search_endpoint}/indexes?api-version=${api_version}"
 indexer_endpoint="${cog_search_endpoint}/indexers?api-version=${api_version}"
 
 
+info "Changing current working directory to $(dirname "$0")"
+cd "$(dirname "$0")"
+
 info "Substituting parameter values to files"
 find . -name '*.json' -exec sed -i -e "s/<blob-connection-string>/${BLOB_CONN_STR//\//\\\/}/g" {} \;
 find . -name '*.json' -exec sed -i -e "s/<cognitive-service-key>/${COG_SERVICE_KEY}/g" {} \;
