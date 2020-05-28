@@ -91,7 +91,7 @@ escaped_sas_url=$(echo $BLOB_SAS_URL | sed -r 's/\//\\\//g' | sed -r 's/\&/\\&/g
 find ./formRecognizer -name '*.json' -exec sed -i -e "s/<blob-sas-url>/${escaped_sas_url}/g" {} \;
 
 info "Training form recognizer model"
-form_rec_model_url=$(curl --silent -S -X POST \
+form_rec_model_url=$(curl --silent --show-error -X POST \
   -H 'Content-Type: application/json' \
   -H "Ocp-Apim-Subscription-Key: ${FORM_REC_KEY}" \
   -d  @formRecognizer/formRecognizer-train.json \

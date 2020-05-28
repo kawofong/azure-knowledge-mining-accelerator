@@ -100,7 +100,7 @@ find . -name '*.json' -exec sed -i -e "s/<form-rec-function-url>/${FUNCTION_URL/
 info "--- Creating collateral AI enrichment pipeline ---"
 
 info "Creating collateral data source"
-curl --silent -X POST \
+curl --silent --show-error -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @collateral/collateral-datasource.json \
@@ -108,7 +108,7 @@ curl --silent -X POST \
   1> /dev/null
 
 info "Creating collateral skillset"
-curl --silent -X POST \
+curl --silent --show-error -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @collateral/collateral-skillset.json \
@@ -116,7 +116,7 @@ curl --silent -X POST \
   1> /dev/null
 
 info "Creating collateral index"
-curl --silent -X POST \
+curl --silent --show-error -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @collateral/collateral-index.json \
@@ -124,7 +124,7 @@ curl --silent -X POST \
   1> /dev/null
 
 info "Creating collateral indexer"
-curl --silent -X POST \
+curl --silent --show-error -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @collateral/collateral-indexer.json \
@@ -137,7 +137,7 @@ info "--- Collateral AI enrichment pipeline setup complete ---"
 info "--- Creating invoice AI enrichment pipeline ---"
 
 info "Creating invoice data source"
-curl --silent -X POST \
+curl --silent --show-error -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @invoice/invoice-datasource.json \
@@ -145,7 +145,7 @@ curl --silent -X POST \
   1> /dev/null
 
 info "Creating invoice skillset"
-curl --silent -X POST \
+curl --silent --show-error -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @invoice/invoice-skillset.json \
@@ -153,7 +153,7 @@ curl --silent -X POST \
   1> /dev/null
 
 info "Creating state synonym map"
-curl --silent -X POST \
+curl --silent --show-error -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @invoice/invoice-synonym.json \
@@ -161,7 +161,7 @@ curl --silent -X POST \
   1> /dev/null
 
 info "Creating invoice index"
-curl --silent -X POST \
+curl --silent --show-error -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @invoice/invoice-index.json \
@@ -169,7 +169,7 @@ curl --silent -X POST \
   1> /dev/null
 
 info "Creating invoice indexer"
-curl --silent -X POST \
+curl --silent --show-error -X POST \
   -H 'Content-Type: application/json' \
   -H "api-key: ${COG_SEARCH_KEY}" \
   -d @invoice/invoice-indexer.json \
