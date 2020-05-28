@@ -151,11 +151,10 @@ az storage copy --source-local-path ./data/invoice \
 # Train form recognizer model
 info "Creating SAS token for blob"
 end=`date -u -d "1 month" '+%Y-%m-%dT%H:%MZ'`
-blob_sas_token=$(az storage account generate-sas \
+blob_sas_token=$(az storage container generate-sas \
+--name raw \
 --permissions lr \
 --account-name "${azure_blob_name}" \
---services b \
---resource-types sco \
 --expiry $end \
 --connection-string "${azure_blob_conn_str}" \
 -o tsv)
@@ -165,7 +164,7 @@ info "Executing setup_form_recognizer.sh"
 export FORM_REC_NAME=$azure_formrec_name
 export FORM_REC_KEY=$azure_formrec_key
 export BLOB_SAS_URL=$blob_sas_url
-./scripts/setup_form_recognizer.sh
+source ./scripts/setup_form_recognizer.sh
 
 # Configure Azure function custom skill
 info "Configuring custom skill hosted on Azure function"

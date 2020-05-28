@@ -38,12 +38,9 @@ Solution accelerator for Azure knowledge mining use cases using [Azure Cognitive
 
 ## TODO
 
-- Gather data (healthcare research paper, media image, manufacturing field note)
-- build pipeline for each type of data
-- Instructions on getting started
+- Build pipeline for different types of data (healthcare research paper, media image, manufacturing field note)
 - create postman collection to demo boosting/autocomplete/suggestion
 - reporting
-- test using cloud shell
 - sanitize credentials
 
 ---
