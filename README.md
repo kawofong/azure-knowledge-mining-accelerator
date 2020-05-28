@@ -6,10 +6,13 @@ Solution accelerator for Azure knowledge mining use cases using [Azure Cognitive
 
 ## Getting Started
 
-**WARNING**: Please do not commit the Azure secrets to GitHub
+**WARNING**: Please do not commit Azure secrets to GitHub
 
 - For setup instructions through Azure Portal, please see [this](./doc/instructions.md)
 
+- For scripted setup, follow the below steps
+  - Launch Azure Cloud Shell in bash and clone this repo
+  - Execute `AZ_SUBSCRIPTION_ID='<subscription-id>' AZ_BASE_NAME='<base-name>' ./scripts/setup.sh`
 
 ## Public Demos
 
