@@ -1,0 +1,280 @@
+{
+	"info": {
+		"_postman_id": "df461ae5-5506-4732-b3d9-383acf0a9ae2",
+		"name": "Azure Knowledge Mining Accelerator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Full-text Search - Simple",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{apiKey}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": true,\n    \"search\": \"*\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{searchService}}.search.windows.net/indexes/{{index}}/docs/search?api-version=2019-05-06",
+					"protocol": "https",
+					"host": [
+						"{{searchService}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"{{index}}",
+						"docs",
+						"search"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2019-05-06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Full-text Search - Complex",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"type": "text",
+						"value": "{{apiKey}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": true,\n    \"search\": \"Redmond\",\n    \"filter\": \"metadata_storage_size gt 150000\",\n    \"orderby\": \"metadata_storage_name asc\",\n    \"facets\": [\n        \"metadata_storage_content_type\",\n        \"metadata_language\",\n        \"recipient\"\n    ],\n    \"highlight\": \"address, recipient\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{searchService}}.search.windows.net/indexes/{{index}}/docs/search?api-version=2019-05-06",
+					"protocol": "https",
+					"host": [
+						"{{searchService}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"{{index}}",
+						"docs",
+						"search"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2019-05-06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Full-text Search - Scoring Profile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"type": "text",
+						"value": "{{apiKey}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": true,\n    \"search\": \"Redmond\",\n    \"filter\": \"metadata_storage_size gt 150000\",\n    \"scoringProfile\": \"boostRecipient\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{searchService}}.search.windows.net/indexes/{{index}}/docs/search?api-version=2019-05-06",
+					"protocol": "https",
+					"host": [
+						"{{searchService}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"{{index}}",
+						"docs",
+						"search"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2019-05-06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Full-text Search - Synonym",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"type": "text",
+						"value": "{{apiKey}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"count\": true,\n    \"search\": \"California\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{searchService}}.search.windows.net/indexes/{{index}}/docs/search?api-version=2019-05-06",
+					"protocol": "https",
+					"host": [
+						"{{searchService}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"{{index}}",
+						"docs",
+						"search"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2019-05-06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Autocomplete",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"type": "text",
+						"value": "{{apiKey}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \r\n  \"search\": \"WA\",  \r\n  \"autocompleteMode\": \"twoTerms\",\r\n  \"top\": 3,  \r\n  \"suggesterName\": \"sg-invoice\"  \r\n}  ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{searchService}}.search.windows.net/indexes/{{index}}/docs/autocomplete?api-version=2019-05-06",
+					"protocol": "https",
+					"host": [
+						"{{searchService}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"{{index}}",
+						"docs",
+						"autocomplete"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2019-05-06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Suggestion",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"type": "text",
+						"value": "{{apiKey}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \r\n  \"search\": \"WA\",  \r\n  \"top\": 3,  \r\n  \"suggesterName\": \"sg-invoice\"  \r\n}  ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{searchService}}.search.windows.net/indexes/{{index}}/docs/suggest?api-version=2019-05-06",
+					"protocol": "https",
+					"host": [
+						"{{searchService}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"{{index}}",
+						"docs",
+						"suggest"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2019-05-06"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

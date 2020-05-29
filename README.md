@@ -8,11 +8,13 @@ Solution accelerator for Azure knowledge mining use cases using [Azure Cognitive
 
 **WARNING**: Please do not commit Azure secrets to GitHub
 
-- For setup instructions through Azure Portal, please see [this](./doc/instructions.md)
+- For setup instructions of cracking travel collateral documents through Azure Portal, please see [this](./doc/instructions.md)
 
 - For scripted setup, follow the below steps
   - Launch Azure Cloud Shell in bash and clone this repo
   - Execute `AZ_SUBSCRIPTION_ID='<subscription-id>' AZ_BASE_NAME='<base-name>' ./scripts/setup.sh`
+
+- For additional examples of Azure Cognitive Search features, download [Postman](https://www.postman.com/downloads/) and import Postman collection & environment under `./postman`. The Postman collection contains RESTful APIs which demonstrate additional Azure Cognitive Search features.
 
 ## Public Demos
 
