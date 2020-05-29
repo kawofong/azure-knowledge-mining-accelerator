@@ -30,6 +30,8 @@ Solution accelerator for Azure knowledge mining use cases using [Azure Cognitive
 
 - [Azure Cognitive Search concepts and features](./doc/concepts.md)
 
+- [Azure Cognitive Search Enterprise Readiness Checklist](./doc/enterprise_readiness.md)
+
 - [Azure Cognitive Search: Built-in Skills](https://docs.microsoft.com/en-us/azure/search/cognitive-search-predefined-skills)
 
 - [Github | Azure | Azure Cognitive Search Sample Custom Skills](https://github.com/Azure-Samples/azure-search-power-skills)

@@ -15,6 +15,9 @@
 
 - [Synonyms](https://docs.microsoft.com/en-us/azure/search/search-synonyms): associate equivalent terms that implicitly expand the scope of a query, without the user having to actually provide the term. For example, given the term "dog" and synonym associations of "canine" and "puppy"
 
+- [Partition](https://docs.microsoft.com/en-us/azure/search/search-capacity-planning#terminology-replicas-and-partitions): Provides index storage and I/O for read/write operations. Each partition has a share of the total index. If you allocate three partitions, your index is divided into thirds.
+
+- [Replica](https://docs.microsoft.com/en-us/azure/search/search-capacity-planning#terminology-replicas-and-partitions): Instance of the search service, used primarily to load balance query operations. Each replica is one copy of an index.
 
 # Azure Cognitive Search Features
 
